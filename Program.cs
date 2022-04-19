@@ -1,6 +1,5 @@
-
 using Microsoft.EntityFrameworkCore;
-using Trello_Duda.Models;
+using Trello.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,27 +8,34 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddEntityFrameworkNpgsql()
     .AddDbContext<Connection>(options =>
-    options.UseNpgsql("User Id=postgres;Password=J3r3v4ss3r*_*;Host=localhost;Port=5432;Database=Banco-Dados;Pooling=true;"));
+    options.UseNpgsql("User Id=bhuxjgmi;Password=MQ2gNA0gHFnh1O3JvOBDR92jg3LCMuKf;Host=kesavan.db.elephantsql.com;Port=5432;Database=bhuxjgmi;Pooling=true;"));
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(s =>
+{
+    s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "V1",
+        Title = "Trello",
+        Description = "Test"
+    });
+    
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
 
 app.Run();
